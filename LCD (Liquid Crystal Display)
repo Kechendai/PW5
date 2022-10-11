@@ -1,0 +1,86 @@
+//LCD.C
+#include <xc.h>
+#include <stdio.h>
+
+#define _XTAL_FREQ	64000000L
+
+#define	LCD_DATA_TRIS	           TRISD
+#define	LCD_RS_TRIS		TRISAbits.TRISA2
+#define	LCD_E_TRIS		TRISAbits.TRISA3
+#define	LCD_DATA		           LATD
+#define	LCD_RS		           LATAbits.LATA2
+#define	LCD_E			LATAbits.LATA3
+
+void setup(void);
+void delay(unsigned int x);
+void lcd_init8(void);
+void lcd_data(unsigned char data);
+void lcd_cmd(unsigned char data);
+void lcd_setCursor(unsigned char col, unsigned char row);
+void lcd_clear(void);
+
+void main (void)
+{
+unsigned char i;         /*Refer to the task, modified this area*/
+
+setup();
+lcd_init8();  
+}
+
+//Functioin LCD
+void lcd_init8(void)
+{
+LCD_DATA_TRIS = 0;
+LCD_RS_TRIS = 0;
+LCD_E_TRIS = 0;
+lcd_cmd(0x38);
+lcd_cmd(0x0C);
+lcd_cmd(0x01);
+lcd_cmd(0x06);
+lcd_cmd(0x80);  }
+
+void lcd_data(unsigned char data)
+{
+LCD_DATA = data;
+LCD_RS = 1;
+LCD_E = 1;delay(1);LCD_E = 0;  }
+
+void lcd_cmd(unsigned char data)
+{
+LCD_DATA = data;
+LCD_RS = 0;
+LCD_E = 1;delay(1);LCD_E = 0;  }
+
+void lcd_setCursor(unsigned char col, unsigned char row)
+{
+lcd_cmd(row*0x40+col+0x80); delay(1);  }
+
+void lcd_clear(void)
+{
+lcd_cmd(0x01);delay(10);  }
+
+
+/*BAHAGIAN INI JANGAN KACAU :)*/
+/*BAHAGIAN INI JANGAN KACAU :)*/
+void setup(void)
+{
+	
+	ANSELA = 0b00000000;
+	ANSELB = 0b00000000;
+	ANSELC = 0b00000000;
+	ANSELD = 0b00000000;
+	ANSELE = 0b00000000;
+	VREFCON0 = 0b10110000;	// Fixed Voltage Reference is enabled, x4 (4.096V)
+	ADCON1 = 0b00110000;	//0b00110000=4.096V 0b00100000=2.048V 0b00000000=Vdd
+	ADCON2 = 0b10000011;
+	
+	LATA = 0x00;
+	LATB = 0x00;
+	LATC = 0x00;
+	LATD = 0x00;
+	LATE = 0x00;  }
+
+void delay(unsigned int x)
+{
+for(;x>0;x--)__delay_ms(1);	
+}
