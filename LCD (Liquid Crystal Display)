@@ -20,11 +20,10 @@ void lcd_setCursor(unsigned char col, unsigned char row);
 void lcd_clear(void);
 
 void main (void)
-{
-unsigned char i;         /*Refer to the task, modified this area*/
-
+{        
 setup();
 lcd_init8();  
+ /*Refer to the task, modified this area*/
 }
 
 //Functioin LCD
