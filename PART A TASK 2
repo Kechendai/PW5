@@ -1,0 +1,25 @@
+#include <xc.h>
+void msDELAY (unsigned int ms);
+void main(void)
+{
+OSCON=0x52;
+TRISBbits.TRISB0=0
+TRISBbits.TRISB1=0;
+ANSELB=0;
+
+while(1)
+{
+/* ADD YOUR CODE HERE (REFER INSTRUCTION ON LABSHEET)*/
+}
+
+void msDelay (unsigned int ms)
+{
+unsigned char i;
+while(ms)
+{
+ms--;
+i=122;
+while(i)i--;
+}
+}
+}
