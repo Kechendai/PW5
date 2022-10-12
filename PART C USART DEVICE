@@ -1,0 +1,90 @@
+#include <xc.h>
+#define _XTAL_FREQ 64000000L
+#define baudeRate 9600
+#define SW1 PORTBbits.RB0
+void delay (unsigned int x);
+
+void INTOSC_init(void)
+{
+OSCCON=0x70;
+OSCCON2=0x04;
+OSCTUNE=0x40;
+while(PLLRDY==0);
+}
+
+void UART_init(void)
+{
+TRISCbits.TRISC6=0;
+TRISCbits.TRISC7=1;
+
+SPBRGH1=((_XTAL_FREQ/4)/baudRate-1)/256;
+SPBRG1=((_XTAL_FREQ/4)/baudRate-1)%256;
+BAUDCONbits.BRG15=1;
+TXSTA1bits.BRGH=1;
+
+TXSTA1bits.SYNC=0;
+RCSTA1bits.SPEN=1;
+
+TXSTA1bits.TXEN=1;
+RCSTA1bits.CREN=1;
+
+TXSTA1bits.TX9=0;
+RCSTA1bits.RX9=0;
+}
+
+void UART_send_char(char data)
+{
+while (P1R1bits.TX1IF==0);
+TXREG1=data;
+}
+
+char UART_get_char()
+{
+while(!PIR1bits.RC1IF);
+
+if(RCSTA1bits.OERR)
+{
+RCSTA1bits.CREN=0;
+RCSTA1bits.CREN=1;
+}
+return RCREG1;
+}
+
+void UART_send_string(char*pointer)
+{
+while(*pointer)
+UART_send_char(*pointer++)
+}
+
+void main (void)
+{
+INTOSC_init();
+TRISB=0x01;
+ANSELB=0;
+UART_init();
+UART_send_string("PIC will send data using\r\n");
+UART_send_string("Serial Communicaion Protocol\r\n");
+UART_send_string("Push a switch\r\n");
+delay(1000);
+while(1)
+{
+if(SW1==0)
+{
+LATBbits.LATB7=1;
+UART_send_string("You pushed the switch\r\n");
+UART_send_string("RED LED->ON\r\n");
+}
+else
+{
+LATBits.LATB7=0;
+UART_send_string("Switch Is Not Pressed\r\n");
+UART_send_string("RED LED->OFF\r\n");
+}
+}
+}
+
+void delay(unsigned int x)
+{
+for(;x>0;x--)
+__delay_ms(1);
+}
