@@ -1,0 +1,17 @@
+#include <xc.h>
+#define MOTOR PORTBbits.RB0
+#define SW PORTDbits.RD0
+
+void main(void)
+{
+OSCON=0x52;
+TRISBbits.TRISB0=0
+TRISDbits.TRISD0=1;
+ANSELD=0;
+MOTOR=0;
+
+while(1)
+{
+/* ADD YOUR CODE HERE (REFER INSTRUCTION ON LABSHEET)*/
+}
+}
