@@ -12,6 +12,13 @@ MOTOR=0;
 
 while(1)
 {
-/* ADD YOUR CODE HERE (REFER INSTRUCTION ON LABSHEET)*/
+if(SW=0)
+{
+MOTOR=1;
+}
+else
+{
+MOTOR=0;
+}
 }
 }
